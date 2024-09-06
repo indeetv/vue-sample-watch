@@ -1,24 +1,18 @@
 <script setup lang="ts">
-  import Login from '@/pages/login.vue';
+  import { createPinia } from 'pinia';
+  import { onMounted } from 'vue';
+  import { RouterView } from 'vue-router';
+  import { useProductConfigStore } from './store/product-config';
+      
+  onMounted(async()=>{
+    await useProductConfigStore().getProductConfig();
+  })
 </script>
 
 <template>
-  <div class="text-3xl font-bold underline">
-      <login/>
-  </div>
+  <RouterView/>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
 </style>
