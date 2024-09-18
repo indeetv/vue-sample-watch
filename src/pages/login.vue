@@ -13,19 +13,15 @@ import router from '@/router/index.js';
 import { useLoggedInStore } from '@/store/loggedIn.ts'
 
 
-// Initialize instances
 const api = new myFetch();
 const token = import.meta.env.VITE_API_KEY;
 const productConfigStore = useProductConfigStore();
 
-// Compute authentication type from product configuration store
 const authType = computed(() => productConfigStore.auth_type);
 
-// Function to handle login
 const initiateLogin = async (data: { email?: string; authKey: string }) => {
   console.log("Token:", token);
 
-  // Construct request body based on auth type
   const requestBody =
     authType.value === 'PWD'
       ? {
@@ -49,7 +45,7 @@ const initiateLogin = async (data: { email?: string; authKey: string }) => {
   console.log(requestBody);
 
     const response = await api.post(
-      'auth/login',
+      'v2/watch/auth/login',
       requestBody,
       {
         Authorization: `Bearer ${token}`,
@@ -66,5 +62,5 @@ const initiateLogin = async (data: { email?: string; authKey: string }) => {
 </script>
 
 <style scoped>
-/* Your component styles here */
+
 </style>

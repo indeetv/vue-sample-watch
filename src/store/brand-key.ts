@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { myFetch } from '@/store/utils/myFetch.ts';
+import { metaConfigStore } from '@/store/meta-config.ts';
 import { getAuthData } from '@/store/utils/auth.ts';
 import getClientID from '@/store/utils/getClientID.ts';
 
@@ -24,12 +25,13 @@ export const useBrandKey = defineStore('useBrandKey', {
   actions: {
     async setBrandKey() {
       try {
+        const metaConfigStoreData=metaConfigStore();
         const api = new myFetch();
         const authKey = getAuthData();
         const clientID = getClientID();
 
         const response = await api.get(
-          'content/brands',
+          metaConfigStoreData.endpoints['watch.content.brand.list'],
           {
             Authorization: `JWT ${authKey}`,
             ClientID: clientID

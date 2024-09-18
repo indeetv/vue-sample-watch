@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { metaConfigStore } from '@/store/meta-config.ts';
+import { metaConfigStore } from '@/store/meta-config.ts'
 import navbar from '@/components/navbar.vue';
 import { useBrandKey } from '@/store/brand-key';
 
@@ -55,7 +55,6 @@ interface BrandType {
   header: string;
 }
 
-const useMetaConfigData=metaConfigStore();
 const router = useRouter();
 const brands = ref<BrandType[]>([]);
 const isLoading = ref(true);
@@ -75,15 +74,14 @@ const getBrandLogo = (logo: string | null) => {
 };
 
 onMounted(async () => {
-  try {
-    isLoading.value = true;
-    await useBrandKey().setBrandKey();
-    brands.value = useBrandKey().brands;
-  } catch (error) {
-    console.error('Failed to load brands:', error);
-  } finally {
-    isLoading.value = false;
-  }
+
+  await metaConfigStore().getMetaConfigData();
+  
+  isLoading.value = true;
+  await useBrandKey().setBrandKey();
+  brands.value = useBrandKey().brands;
+  isLoading.value = false;
+  
 });
 </script>
 

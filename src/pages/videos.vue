@@ -38,18 +38,20 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router'; // Import useRouter and useRoute
+import { useRouter, useRoute } from 'vue-router'; 
 import navbar from '@/components/navbar.vue';
 import { myFetch } from '@/store/utils/myFetch';
-import getClientID from '@/store/utils/getClientID'; // Ensure correct import path
-import { getAuthData } from '@/store/utils/auth'; // Ensure correct import path
+import getClientID from '@/store/utils/getClientID'; 
+import { getAuthData } from '@/store/utils/auth'; 
+import { metaConfigStore } from '@/store/meta-config.ts';
 
-const router = useRouter(); // Use useRouter to get the router instance
-const route = useRoute(); // Use useRoute to get route details
+const router = useRouter(); 
+const route = useRoute(); 
 const allVideos = ref<Video[]>([]);
 const token = getAuthData();
 const isLoading = ref(true);
-const projectKey = ref<string | undefined>(''); // Initialize projectKey
+const projectKey = ref<string | undefined>(''); 
+const metaConfigStoreData=metaConfigStore();
 
 interface Video {
   name: string;
@@ -57,7 +59,7 @@ interface Video {
   duration_in_sec: number;
   expiresOn: string;
   poster: string;
-  key?: string; // Ensure video object has key property if used
+  key?: string; 
 }
 
 const getImageSrc = (src: string | null) => {
@@ -65,11 +67,14 @@ const getImageSrc = (src: string | null) => {
 };
 
 onMounted(async () => {
+  await metaConfigStore().getMetaConfigData();
+
   try {
     const api = new myFetch();
     projectKey.value = route.query.projectKey as string | undefined;
     if (projectKey.value) { 
-      const response = await api.get(`content/projects/${projectKey.value}/videos`, {
+      const videoListEndpoint = metaConfigStoreData.endpoints['watch.content.videos.list'].replace('<str:project_key>', projectKey.value);
+      const response = await api.get(videoListEndpoint, {
         Authorization: `JWT ${token}`,
         'ClientID': getClientID()
       });

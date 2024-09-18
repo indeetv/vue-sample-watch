@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { myFetch } from '@/store/utils/myFetch.ts';
 import { getAuthData } from '@/store/utils/auth.ts';
-import { useBrandKey } from '@/store/brand-key.ts';
+import { metaConfigStore } from '@/store/meta-config.ts';
 import getClientID from '@/store/utils/getClientID.ts';
 
 interface Project {
@@ -27,12 +27,13 @@ export const useProjectListing = defineStore('useProjectListing', {
   actions: {
     async setProjectListing(brandKey : string) {
       try {
+        const metaConfigStoreData=metaConfigStore();
         const api = new myFetch();
         const authKey = getAuthData();
         const clientID = getClientID();
 
         const response = await api.get(
-          `content/projects?brand=${brandKey}`,  
+          metaConfigStoreData.endpoints['watch.content.project.list']+`?brand=${brandKey}`,  
           {
             Authorization: `JWT ${authKey}`,
             ClientID: clientID

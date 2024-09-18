@@ -50,7 +50,7 @@ export const metaConfigStore = defineStore('metaConfig', {
 
         // Fetch the product configuration data
         const data = await api.get(
-        `meta/endpoints?device=browser`,
+        `v2/watch/meta/endpoints?device=browser`,
         { 
             Authorization: `Bearer ${token}`,
             'ClientID': getClientID()

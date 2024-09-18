@@ -43,14 +43,12 @@ import { useRouter, useRoute } from 'vue-router';
 import navbar from '@/components/navbar.vue';
 import { useProjectListing } from '@/store/project-listing.ts';
 
-// Define the types used
 interface Project {
   key: string;
   name: string;
   image: string | null;
 }
 
-// Define refs and hooks
 const heading = ref<string>('');
 const isLoading = ref<boolean>(true);
 const router = useRouter();
@@ -64,19 +62,17 @@ const openProject = (eachproject: Project) => {
     path: '/videos', 
     query: { 
       projectKey: eachproject.key,
-      brandKey: brandKey.value || '' // Ensure default value if undefined
+      brandKey: brandKey.value || '' 
     }
   });
   console.log("Project result:", projectListing.results.length);
   console.log("Project clicked", eachproject.key);
 };
 
-// Function to get image source with fallback
 const getImageSrc = (src: string | null) => {
   return src || new URL('@/assets/images/default-project-poster-1.jpg', import.meta.url).href;
 };
 
-// Fetch project listing on component mount
 onMounted(async () => {
   brandKey.value = route.query.brandKey as string | undefined;
   heading.value = route.query.heading as string | undefined;
@@ -95,5 +91,5 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* Add any specific styling if needed */
+
 </style>

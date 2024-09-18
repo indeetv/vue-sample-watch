@@ -14,7 +14,8 @@ import { myFetch } from '@/store/utils/myFetch.ts';
 
 const route = useRoute();
 const api=new myFetch();
-const useMetaConfigData=metaConfigStore();
+const metaConfigStoreData=metaConfigStore();
+const baseUrl=import.meta.env.VITE_BASE_URL || '';
 const watchApiKey = import.meta.env.VITE_API_KEY; 
 const projectKey = ref(route.query.projectKey as string | undefined);
 const screenerKey = ref(route.query.screenerKey as string | undefined);
@@ -22,8 +23,8 @@ const videoKey = ref(route.query.videoKey as string | undefined);
 
 const dataToEnablePlayback = {
   apiUrl: null,
-  embeddablePlayerInitializationUrl: 'https://qa8-api.devtest.indee.tv/v2/watch/stream/player/init',
-  embeddablePlayerTemplateURL: 'https://qa8-api.devtest.indee.tv/v2/watch/stream/player/view',
+  embeddablePlayerInitializationUrl: null,
+  embeddablePlayerTemplateURL: null,
   apiKey: watchApiKey,
 };
 
@@ -95,7 +96,7 @@ const init = async () => {
   try {
     if(screenerKey.value==null)
     {
-      const response=await api.get(`content/projects/${projectKey.value}/videos/${videoKey.value}`,
+      const response=await api.get(`v2/watch/content/projects/${projectKey.value}/videos/${videoKey.value}`,
       {
         Authorization: `JWT ${getAuthData()}`,
         Clientid: getClientID()
@@ -104,7 +105,8 @@ const init = async () => {
       console.log("Video details: ",response.screening_details.screener_key)
     }
     dataToEnablePlayback.apiUrl=`https://qa8-api.devtest.indee.tv/v2/watch/stream/${screenerKey.value}/playback`;
-
+    dataToEnablePlayback.embeddablePlayerInitializationUrl=`${baseUrl}${metaConfigStoreData.endpoints['watch.stream.player_function.retrieve']}`
+    dataToEnablePlayback.embeddablePlayerTemplateURL=`${baseUrl}${metaConfigStoreData.endpoints['watch.stream.player_component.retrieve']}`;
     await loadScript(dataToEnablePlayback.embeddablePlayerInitializationUrl);
     await fetchPlaybackData();
     
@@ -113,7 +115,6 @@ const init = async () => {
   }
 };
 
-// Lifecycle hook to run initialization on component mount
 onMounted(() => {
   init();
 });
