@@ -54,27 +54,16 @@ const props=defineProps({
 const email=ref('');
 const authKey=ref('');
 
-const emit = defineEmits(['validated-data']);
+const emit = defineEmits<{
+    (e: 'submit', data: { email?: string; authKey: string }): void;
+}>();
 
 const submitHandler=()=>{
-    if(props.authType==='PWD')
-    {
-        const outputData={
-            email: email.value,
-            password: authKey.value,
-        }
-        emit('validated-data',outputData)
-        console.log("PWD auth",outputData)
-    }
-    else
-    if(props.authType==='PIN')
-    {
-        const outputData={
-            authKey: authKey.value,
-        }
-        emit('validated-data',outputData)
-        console.log("PIN auth:",outputData)
-    }
+   const formData = {
+        email: props.authType !== 'PIN' ? email.value : undefined, // include email only if not 'PIN'
+        authKey: authKey.value,
+    };
+    emit('submit', formData);
 }
 
 </script>

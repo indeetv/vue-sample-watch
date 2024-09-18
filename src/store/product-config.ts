@@ -13,33 +13,28 @@ export const useProductConfigStore = defineStore('productConfig', {
   },
   getters: {},
   actions: {
-    /**
-     * Fetches product config data and sets the store's state.
-     */
+    
     async getProductConfig() {
       const api = new myFetch();
       const token = import.meta.env.VITE_API_KEY;
       
-      try {
-        // Fetch the product configuration data
-        const data = await api.get(
-          `meta/product-config?device=browser`, 
-          { 
-            Authorization: `Bearer ${token}`,
-            'ClientID': getClientID()
-          }
-        );
+      // Fetch the product configuration data
+      const data = await api.get(
+        `meta/product-config?device=browser`, 
+        { 
+           Authorization: `Bearer ${token}`,
+          'ClientID': getClientID()
+        }
+      );
         
-        // Update the store's state with the fetched data
-        this.key = data.key;
-        this.auth_type = data.auth_type;
-        this.signup_allowed = data.signup_allowed;
+      // Update the store's state with the fetched data
+      this.key = data.key;
+      this.auth_type = data.auth_type;
+      this.signup_allowed = data.signup_allowed;
         
-        // Optionally log the data to the console for debugging
-        console.log('Product Config Data:', data);
-      } catch (error) {
-        console.error('Error fetching product config:', error);
-      }
+      // Optionally log the data to the console for debugging
+      console.log('Product Config Data:', data);
+     
     }
   }
 });

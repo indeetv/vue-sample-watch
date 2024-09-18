@@ -1,3 +1,6 @@
+import { router } from '@/router/index.ts';
+import { clearAuthData } from '@/store/utils/auth.ts'
+
 export class myFetch {
     private baseUrl: string;
 
@@ -23,7 +26,7 @@ export class myFetch {
         }
     }
 
-    async post<T>(endpoint: string, data: any, headers?: HeadersInit): Promise<T> {
+    async post<T,D>(endpoint: string, data: D, headers?: HeadersInit): Promise<T> {
         try {
             const response = await fetch(`${this.baseUrl}${endpoint}`, {
                 method: 'POST',
@@ -33,8 +36,10 @@ export class myFetch {
                 },
                 body: JSON.stringify(data),
             });
+
             return this.handleResponse<T>(response);
         } catch (error) {
+            
             console.error('Fetch POST error:', error);
             throw error;
         }
@@ -43,7 +48,20 @@ export class myFetch {
     private async handleResponse<T>(response: Response): Promise<T> {
         if (!response.ok) {
             const errorMessage = await response.text();
+            if(response.status==401)
+            {
+                console.log("*****")
+                if(router)
+                {
+                    router.push('/login')
+                    console.log('Login router')
+                }
+                else
+                    console.warn('Router is not set. Unable to redirect to login.');
+                clearAuthData();
+            }
             throw new Error(`HTTP error! status: ${response.status}, message: ${errorMessage}`);
+            
         }
         return response.json() as Promise<T>;
     }

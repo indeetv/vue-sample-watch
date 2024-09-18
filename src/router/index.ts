@@ -1,5 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import login from '@/pages/login.vue'; 
+import brands from '@/pages/brands.vue';
+import projects from '@/pages/projects.vue'
+import videos from '@/pages/videos.vue'
+import viewing_room from '@/pages/viewing_room.vue'
+import { useLoggedInStore } from '@/store/loggedIn.ts'
+import { comma } from 'postcss/lib/list';
 
 const routes = [
   {
@@ -8,14 +14,25 @@ const routes = [
     component: login
   },
   {
+    path:'/brands',
+    name: 'brands',
+    component: brands
+  },
+  {
     path:'/project',
-    name:'project'
+    name:'project',
+    component: projects
   },
   {
     path:'/videos',
-    name:'videos'
+    name:'videos',
+    component: videos
   },
-
+  {
+    path:'/viewing_room',
+    name:'viewing room',
+    component: viewing_room
+  },
   // Redirect to login page
   {
     path: '/',
@@ -23,9 +40,21 @@ const routes = [
   }
 ];
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(), 
   routes
+});
+
+router.beforeEach(async (to, from, next) => {
+  const loggedInStore = useLoggedInStore();
+
+  await loggedInStore.getLoginState();
+
+  if (loggedInStore.loggedIn || to.name === 'login') {
+    next();
+  } else {
+    next('/login');
+  }
 });
 
 export default router;
