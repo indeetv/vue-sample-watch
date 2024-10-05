@@ -6,10 +6,10 @@ import getClientID from '@/store/utils/getClientID.ts';
 
 interface Brand {
   key: string;
-  keyword: string;
+  // keyword: string;
   name: string;
   logo: string | null;
-  header: string | null;
+  // header: string | null;
 }
 
 interface BrandKeyState {
@@ -42,10 +42,10 @@ export const useBrandKey = defineStore('useBrandKey', {
         if (response.results.length > 0) {
           const brandsArray: Brand[] = response.results.map((brandData: any) => ({
             key: brandData.key,
-            keyword: brandData.keyword,
+            // keyword: brandData.keyword,
             name: brandData.name,
             logo: brandData.logo || null, // Store null if logo is not present
-            header: brandData.header || null // Store null if header is not present
+            // header: brandData.header || null // Store null if header is not present
           }));
 
           // Update state with the array of brand objects
