@@ -2,21 +2,20 @@ import { defineStore } from 'pinia';
 import { getAuthData } from '@/store/utils/auth.ts'; 
 
 interface LoggedInDetailsState {
-  loggedIn: boolean;
+  loggedIn : boolean;
 }
 
 export const useLoggedInStore = defineStore('loggedInDetails', {
-  state: (): LoggedInDetailsState => ({
+  state : (): LoggedInDetailsState => ({
     loggedIn: false
   }),
-  getters: {
+  getters : {
 
     },
-  actions: {
+  actions : {
     getLoginState() {
       const authData = getAuthData();
       this.loggedIn = (authData!=null)? true : false; 
-      console.log("LoggedIn:",this.loggedIn)
     }
   }
 });

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-  import { createPinia } from 'pinia';
   import { onMounted } from 'vue';
   import { RouterView } from 'vue-router';
-  import { metaConfigStore } from '@/store/meta-config'
-  import { useProductConfigStore } from '@/store/product-config';
+  import { metaConfigStore } from '@/store/meta-config.ts';
+  import { useProductConfigStore } from '@/store/product-config.ts';
       
   onMounted(async()=>{
     await metaConfigStore().getMetaConfigData();

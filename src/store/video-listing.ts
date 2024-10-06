@@ -1,25 +1,25 @@
 import { defineStore } from 'pinia';
-import { myFetch } from '@/store/utils/myFetch.ts';
-import { getAuthData } from '@/store/utils/auth.ts';
 import { metaConfigStore } from '@/store/meta-config.ts';
+import { getAuthData } from '@/store/utils/auth.ts';
+import { myFetch } from '@/store/utils/myFetch.ts';
 import getClientID from '@/store/utils/getClientID.ts';
 
 interface Video {
-    name: string;
-    max_views: number;
-    views_consumed: number;
-    start_date: string;
-    expiry_date: string;
-    poster: string;
-    video_key: string;
-    screener_key: string;
+    name : string;
+    max_views : number;
+    views_consumed : number;
+    start_date : string;
+    expiry_date : string;
+    poster : string;
+    video_key : string;
+    screener_key : string;
 }
 
 interface VideoListingState {
-  count: number | null;
-  next: string;
-  previous: string | null;
-  results: Video[];
+  count : number | null;
+  next : string;
+  previous : string | null;
+  results : Video[];
 }
 
 export const useVideoListing = defineStore('useVideoListing', {
@@ -31,47 +31,43 @@ export const useVideoListing = defineStore('useVideoListing', {
   }),
   actions: {
     async setVideoListing(ProjectKey : string) {
-      try {
-        const metaConfigStoreData=metaConfigStore();
-        const api = new myFetch();
-        const authKey = getAuthData();
-        const clientID = getClientID();
 
-        const response = await api.get(
-            metaConfigStoreData.endpoints['watch.content.videos.list'].replace('<str:project_key>', ProjectKey),  
-          {
-            Authorization: `JWT ${authKey}`,
-            ClientID: clientID
-          }
-        );
+      const metaConfigStoreData=metaConfigStore();
+      const api = new myFetch();
+      const authKey = getAuthData();
+      const clientID = getClientID();
 
-        if (response.results && response.results.length > 0) {
-            this.results = response.results.map((video: any) => ({
-                name: video.name || '',
-                max_views: video.screening_details.max_views || 0,
-                views_consumed: video.screening_details?.views_consumed || 0,
-                start_date: this.convertEpochToDate(video.screening_details?.start_date || 0),
-                expiry_date: this.convertEpochToDate(video.screening_details?.expiry_date || 0),
-                poster: video.poster || '',
-                video_key: video.key || '',
-                screener_key: video.screening_details?.screener_key || ''
-              }));  
-        } else {
-          console.warn('No video data found');
+      const response = await api.get(
+        metaConfigStoreData.endpoints['watch.content.videos.list'].replace('<str:project_key>', ProjectKey),  
+        {
+          Authorization: `JWT ${authKey}`,
+          ClientID: clientID
         }
-        console.log("Video Listing: ",this.results)
-      } catch (error) {
-        console.error('Failed to fetch project key data:', error);
+      );
+
+      if (response.results && response.results.length > 0) {
+        this.results = response.results.map((video: any) => ({
+            name: video.name || '',
+            max_views: video.screening_details.max_views || 0,
+            views_consumed: video.screening_details?.views_consumed || 0,
+            start_date: this.convertEpochToDate(video.screening_details?.start_date || 0),
+            expiry_date: this.convertEpochToDate(video.screening_details?.expiry_date || 0),
+            poster: video.poster || '',
+            video_key: video.key || '',
+            screener_key: video.screening_details?.screener_key || ''
+        }));  
+      } else {
+        console.warn('No video data found');
       }
+     
     },
-    convertEpochToDate(epochTime: number)
-    {
-        const date = new Date(epochTime * 1000); // Convert from seconds to milliseconds
-        return date.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        });
+    convertEpochToDate(epochTime: number) {
+      const date = new Date(epochTime * 1000); // Convert from seconds to milliseconds
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
     }  
   }
 });

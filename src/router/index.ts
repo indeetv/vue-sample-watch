@@ -1,46 +1,46 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { useLoggedInStore } from '@/store/loggedIn.ts'
 import login from '@/pages/login.vue'; 
 import brands from '@/pages/brands.vue';
 import projects from '@/pages/projects.vue'
 import videos from '@/pages/videos.vue'
 import viewing_room from '@/pages/viewing_room.vue'
-import { useLoggedInStore } from '@/store/loggedIn.ts'
 
 const routes = [
   {
-    path: '/login', 
-    name: 'login',
-    component: login
+    path : '/login', 
+    name : 'login',
+    component : login
   },
   {
-    path:'/brands',
-    name: 'brands',
-    component: brands
+    path : '/brands',
+    name : 'brands',
+    component : brands
   },
   {
-    path:'/project',
-    name:'project',
-    component: projects
+    path : '/project',
+    name : 'project',
+    component : projects
   },
   {
-    path:'/videos',
-    name:'videos',
-    component: videos
+    path : '/videos',
+    name : 'videos',
+    component : videos
   },
   {
-    path:'/viewing_room',
-    name:'viewing room',
-    component: viewing_room
+    path : '/viewing_room',
+    name : 'viewing room',
+    component : viewing_room
   },
   // Redirect to login page
   {
-    path: '/',
-    redirect: '/login'
+    path : '/',
+    redirect : '/login'
   }
 ];
 
 export const router = createRouter({
-  history: createWebHistory(), 
+  history : createWebHistory(), 
   routes
 });
 
