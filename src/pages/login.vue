@@ -59,7 +59,6 @@
     
     router.push('/brands')
       
-    
   };
 
 </script>

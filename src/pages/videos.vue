@@ -22,6 +22,7 @@
   import Navbar from '@/components/Navbar.vue';
   import Table from '@/components/Table.vue';
 
+  const heading = ref('');
   const columnsData=ref([]);
   const allVideos = ref<Video[]>([]);
   const isLoading = ref(true);
@@ -48,6 +49,7 @@
 
   onMounted(async () => {
 
+    heading.value = route.query.heading as string | undefined;
     projectKey.value = route.query.projectKey as string | undefined;
 
     await videoListing.setVideoListing(projectKey.value);

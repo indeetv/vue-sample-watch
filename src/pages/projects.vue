@@ -40,6 +40,7 @@
     router.push({ 
       path : '/videos', 
       query : { 
+        heading : payLoad.name,
         projectKey : payLoad.key,
         brandKey : brandKey.value || '' 
       }

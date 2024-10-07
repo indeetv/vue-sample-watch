@@ -1,15 +1,15 @@
 <template>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
+    <table class="table-auto w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-blue-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-          <th v-if="heading!=null" colspan="5" scope="col" class="text-base bg-white text-black px-6 py-3">
+          <th v-if="heading != null" colspan="10" scope="col" class="text-base bg-white text-black px-6 py-3">
             {{ heading }}
           </th>
         </tr>
         <tr>
-          <th v-for="(eachColumn, index) in columns" :key="index" scope="col" class="px-6 py-3 w-1/2">
-            {{eachColumn}}
+          <th v-for="(eachColumn, index) in columns" :key="index" scope="col" class="px-6 py-3">
+            {{ eachColumn }}
           </th>
         </tr>
       </thead>
@@ -17,17 +17,17 @@
       <tbody>
 
         <tr v-if="!data.length && !isLoading">
-          <td colspan="2" class="px-6 py-4 text-center">No data available</td>
+          <td colspan="10" class="px-6 py-4 text-center">No data available</td>
         </tr>
         <tr v-if="isLoading">
           <td colspan="2" class="px-6 py-4 text-center">Loading...</td>
         </tr>
 
         <tr
-          v-for="(eachData, key, index) in data"
+          v-for="(eachData, index) in data"
           :key="index"
           @click="triggerClick(eachData)"
-          class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer overflow-auto">
+          class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">
           
           <td
             v-for="(col, key, colIndex) in eachData"
@@ -37,7 +37,7 @@
             <span v-if="key !== 'logo' && key !== 'poster'">{{ col }}</span>
             
             <span v-else-if="key === 'logo' || key === 'poster'" class="flex justify-center items-center">
-              <img :src="getImage(col)" alt="Logo" class="h-14 object-cover"/>
+              <img :src="getImage(col)" alt="Logo" class="h-14 object-contain"/>
             </span>
             
           </td>
@@ -50,29 +50,27 @@
 
 <script lang='ts' setup>
 
-  import { defineProps, ref, defineEmits, PropType, onMounted } from 'vue';
+  import { defineProps, defineEmits, PropType } from 'vue';
 
-  const props=defineProps(
-      {
-          heading: {
-              type:String,
-              required: false
-          },
-          columns:{
-            type: Array<string>,
-            required:true
-          },
-          data: {
-              type: Array as PropType<any[]>,
-              required: true
-          },
-          isLoading: {
-            type: Boolean,
-            default:true,
-            required: true
-          }
-      }
-  );
+  const props = defineProps({
+    heading: {
+      type: String,
+      required: false
+    },
+    columns: {
+      type: Array as PropType<string[]>,
+      required: true
+    },
+    data: {
+      type: Array as PropType<any[]>,
+      required: true
+    },
+    isLoading: {
+      type: Boolean,
+      default: true,
+      required: true
+    }
+  });
 
   const emit = defineEmits();
   const defaultPoster = new URL('@/assets/images/default-project-poster-1.jpg', import.meta.url).href;
@@ -81,8 +79,7 @@
     return logo ? logo : defaultPoster;
   };
 
-  const triggerClick = (eachData: any, event: MouseEvent) => {
-    console.log("Table Clicked:", eachData);
+  const triggerClick = (eachData: any) => {
     emit('click', eachData);
   };
 
