@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { myFetch } from '@/store/utils/myFetch.ts';
 import type { MetaResponse } from './types/meta';
-import getClientID from '@/store/utils/getClientID.ts';
 
 export const metaConfigStore = defineStore('metaConfig', {
   state : (): MetaResponse => {
@@ -44,18 +43,13 @@ export const metaConfigStore = defineStore('metaConfig', {
     async getMetaConfigData() {
 
       const api = new myFetch();
-      const token = import.meta.env.VITE_API_KEY;
 
       // Fetch the product configuration data
       const data = await api.get(
-        `v2/watch/meta/endpoints?device=browser`,
-        { 
-            Authorization: `Bearer ${token}`,
-            'ClientID': getClientID()
-        }
+        `v2/watch/meta/endpoints?device=browser`
       );
           
-        // Update the store's state with the fetched data
+      // Update the store's state with the fetched data
       this.endpoints = (data as MetaResponse).endpoints
       this.host = (data as MetaResponse).host
           

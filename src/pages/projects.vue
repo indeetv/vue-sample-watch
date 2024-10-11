@@ -15,6 +15,7 @@
 
   import { ref, onMounted } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
+  import { metaConfigStore } from '@/store/meta-config.ts';
   import { useProjectListing } from '@/store/project-listing.ts';
   import Navbar from '@/components/Navbar.vue';
   import Table from '@/components/Table.vue';
@@ -32,9 +33,10 @@
   const brandKey = ref<string | undefined>();
   const route = useRoute();
   const router = useRouter();
+  const metaConfigStoreData=metaConfigStore();
   const projectListing = useProjectListing();
 
-  const handleClick = (payLoad) => {
+  const handleClick = (payLoad : any) => {
 
     event.stopPropagation();
     router.push({ 
@@ -48,16 +50,15 @@
 
   };
 
-  const getImageSrc = (src: string | null) => {
-    return src || new URL('@/assets/images/default-project-poster-1.jpg', import.meta.url).href;
-  };
-
   onMounted(async () => {
+
+    await metaConfigStoreData.getMetaConfigData();
 
     heading.value = route.query.heading as string || '';
     brandKey.value = route.query.brandKey as string | undefined;
 
     await projectListing.setProjectListing(brandKey.value);
+    
     columnsData.value = projectListing.results.length > 0 ? Object.keys(projectListing.results[0]) : []
     projectsData.value = projectListing.results;
 

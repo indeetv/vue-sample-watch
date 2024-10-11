@@ -16,7 +16,6 @@
 
 <script setup lang='ts'>
 
-    import { getAuthData } from '@/store/utils/auth.ts'
     import { clearAuthData } from '@/store/utils/auth.ts'
     import { router } from '@/router/index.ts';
 

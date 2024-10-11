@@ -6,7 +6,7 @@
     :columns='columnsData' 
     :data='brandsData' 
     :isLoading='isLoading'
-    @click='handleClick' 
+    @click='handleClick'
   />
 
 </template>
@@ -34,7 +34,7 @@
   const brandListing = useBrandData();
   
 
-  const handleClick = (payLoad) => {
+  const handleClick = (payLoad : any) => {
 
     event.stopPropagation();
     router.push({ 
@@ -47,8 +47,9 @@
   onMounted(async () => {
 
     await metaConfigStore().getMetaConfigData();
+    
     isLoading.value = true;
-    await brandListing.setBrandKey();
+    await brandListing.setBrandData();
     
     heading.value = "Select the brand whose content you want to see."
     columnsData.value = brandListing.brands.length > 0 ? Object.keys(brandListing.brands[0]) : []

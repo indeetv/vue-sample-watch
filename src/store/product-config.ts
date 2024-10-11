@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { productConfigState } from './types/productConfig';
 import { metaConfigStore } from '@/store/meta-config.ts';
 import { myFetch } from '@/store/utils/myFetch.ts';
-import getClientID from '@/store/utils/getClientID.ts';
 
 export const useProductConfigStore = defineStore('productConfig', {
   state : (): productConfigState => {
@@ -19,14 +18,9 @@ export const useProductConfigStore = defineStore('productConfig', {
 
       const metaConfigStoreData=metaConfigStore();
       const api = new myFetch();
-      const token = import.meta.env.VITE_API_KEY;
       
       const data = await api.get(
-        metaConfigStoreData.endpoints['watch.meta.product.retrieve']+"?device=browser", 
-        { 
-           Authorization: `Bearer ${token}`,
-          'ClientID': getClientID()
-        }
+        metaConfigStoreData.endpoints['watch.meta.product.retrieve']+"?device=browser"
       );
         
       this.key = data.key;

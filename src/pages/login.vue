@@ -11,18 +11,15 @@
 
   import { computed } from 'vue';
   import { useRouter } from 'vue-router';
-  import { saveAuthData, getAuthData } from '@/store/utils/auth';
-  import { useLoggedInStore } from '@/store/loggedIn.ts';
+  import { saveAuthData } from '@/store/utils/auth';
   import { useProductConfigStore } from '@/store/product-config';
-  import getClientID from '@/store/utils/getClientID';
   import { myFetch } from '@/store/utils/myFetch';
   import Login from '@/components/Login.vue';
 
   const router = useRouter();
-  const authType = computed(() => productConfigStore.auth_type);
   const productConfigStore = useProductConfigStore();
+  const authType = computed(() => productConfigStore.auth_type);
   const api = new myFetch();
-  const token = import.meta.env.VITE_API_KEY;
 
   const initiateLogin = async (data: { email?: string; authKey: string }) => {
 
@@ -48,11 +45,7 @@
 
     const response = await api.post(
       'v2/watch/auth/login',
-      requestBody,
-      {
-        Authorization : `Bearer ${token}`,
-        ClientID : getClientID()
-      }
+      requestBody
     );
 
     saveAuthData(response.token)  

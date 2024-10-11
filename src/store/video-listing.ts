@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { metaConfigStore } from '@/store/meta-config.ts';
 import { getAuthData } from '@/store/utils/auth.ts';
 import { myFetch } from '@/store/utils/myFetch.ts';
-import getClientID from '@/store/utils/getClientID.ts';
 
 interface Video {
     name : string;
@@ -35,16 +34,14 @@ export const useVideoListing = defineStore('useVideoListing', {
       const metaConfigStoreData=metaConfigStore();
       const api = new myFetch();
       const authKey = getAuthData();
-      const clientID = getClientID();
 
       const response = await api.get(
         metaConfigStoreData.endpoints['watch.content.videos.list'].replace('<str:project_key>', ProjectKey),  
         {
-          Authorization: `JWT ${authKey}`,
-          ClientID: clientID
+          Authorization: `JWT ${authKey}`
         }
       );
-
+      console.log("hdshd", response)
       if (response.results && response.results.length > 0) {
         this.results = response.results.map((video: any) => ({
             name: video.name || '',

@@ -42,29 +42,29 @@
 
 <script setup lang="ts">
 
-import { defineProps,ref,defineEmits } from 'vue';
+    import { defineProps,ref,defineEmits } from 'vue';
 
-const props=defineProps({
-    authType: {
-    type: String,
-    required:true,
-  }
-})
- 
-const email=ref('');
-const authKey=ref('');
+    const props=defineProps({
+        authType: {
+        type: String,
+        required:true,
+        }
+    })
+    
+    const email=ref('');
+    const authKey=ref('');
 
-const emit = defineEmits<{
-    (e: 'submit', data: { email?: string; authKey: string }): void;
-}>();
+    const emit = defineEmits<{
+        (e: 'submit', data: { email?: string; authKey: string }): void;
+    }>();
 
-const submitHandler=()=>{
-   const formData = {
-        email: props.authType !== 'PIN' ? email.value : undefined, // include email only if not 'PIN'
-        authKey: authKey.value,
-    };
-    emit('submit', formData);
-}
+    const submitHandler=()=>{
+        const formData = {
+                email: props.authType !== 'PIN' ? email.value : undefined, // include email only if not 'PIN'
+                authKey: authKey.value,
+            };
+        emit('submit', formData);
+    }
 
 </script>
 

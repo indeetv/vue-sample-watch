@@ -15,10 +15,8 @@
 
   import { ref, onMounted } from 'vue';
   import { useRoute, useRouter } from 'vue-router'; 
-  import { getAuthData } from '@/store/utils/auth'; 
   import { metaConfigStore } from '@/store/meta-config.ts';
   import { useVideoListing } from '@/store/video-listing.ts';
-  import getClientID from '@/store/utils/getClientID';
   import Navbar from '@/components/Navbar.vue';
   import Table from '@/components/Table.vue';
 
@@ -43,16 +41,15 @@
     screener_key : string;
   }
 
-  const getImageSrc = (src: string | null) => {
-    return src || new URL('@/assets/images/default-project-poster-1.jpg', import.meta.url).href;
-  };
-
   onMounted(async () => {
+
+    await metaConfigStoreData.getMetaConfigData();
 
     heading.value = route.query.heading as string | undefined;
     projectKey.value = route.query.projectKey as string | undefined;
 
     await videoListing.setVideoListing(projectKey.value);
+    
     columnsData.value = videoListing.results.length > 0 ? Object.keys(videoListing.results[0]) : [];
     allVideos.value = videoListing.results || [];
 
