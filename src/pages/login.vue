@@ -1,6 +1,7 @@
 <template>
 
   <Login 
+    :logo_image='logo_image'
     :authType='authType'
     @submit='initiateLogin'
   />
@@ -9,17 +10,24 @@
 
 <script setup lang="ts">
 
-  import { computed } from 'vue';
+  import { computed , onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import { saveAuthData } from '@/store/utils/auth';
+  import { metaConfigStore } from '@/store/meta-config'
   import { useProductConfigStore } from '@/store/product-config';
   import { myFetch } from '@/store/utils/myFetch';
   import Login from '@/components/Login.vue';
 
   const router = useRouter();
   const productConfigStore = useProductConfigStore();
+  const logo_image = computed(() => productConfigStore.logo_image)
   const authType = computed(() => productConfigStore.auth_type);
   const api = new myFetch();
+
+  onMounted(async ()=>{
+    await metaConfigStore().getMetaConfigData();
+    await productConfigStore.getProductConfig();
+  })
 
   const initiateLogin = async (data: { email?: string; authKey: string }) => {
 

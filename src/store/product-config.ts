@@ -8,6 +8,7 @@ export const useProductConfigStore = defineStore('productConfig', {
     return {
       key: '',
       auth_type: '',
+      logo_image: '',
       signup_allowed: false
     };
   },
@@ -25,8 +26,9 @@ export const useProductConfigStore = defineStore('productConfig', {
         
       this.key = data.key;
       this.auth_type = data.auth_type;
+      this.logo_image = data.assets.logo_image.links[0];
       this.signup_allowed = data.signup_allowed;
-             
+
     }
   }
 });
