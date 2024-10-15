@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+
+    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <img class="mx-auto h-16 w-auto" :src='logo_image' alt="Company Logo">
             <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
@@ -13,7 +13,15 @@
                         Email address
                     </label>
                     <div class="mt-2">
-                        <input id="email" name="email" type="email" v-model=email autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <input 
+                            id="email" 
+                            name="email" 
+                            type="email" 
+                            v-model=email 
+                            autocomplete="email"  
+                            class="block w-full rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
+                            required
+                        >
                     </div>
                 </div>
                 <div>
@@ -23,55 +31,95 @@
                         </label>
                     </div>
                     <div class="mt-2">
-                        <input id="authKey" name="authKey" type="password" v-model=authKey autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <input 
+                            id="authKey" 
+                            name="authKey" 
+                            :type="inputType" 
+                            @focus="changeType('text')" 
+                            @blur="changeType('password')"
+                            v-model=authKey 
+                            autocomplete="current-password" 
+                            class="block w-full rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
+                            required 
+                        >
                     </div>
                 </div>
 
                 <div>
-                    <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                        Sign in
+                    <button 
+                        type="submit" 
+                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                        <template v-if="isLoading">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path
+                                    fill="currentColor"
+                                    d="M12,23a9.63,9.63,0,0,1-8-9.5,9.51,9.51,0,0,1,6.79-9.1A1.66,1.66,0,0,0,12,2.81h0a1.67,1.67,0,0,0-1.94-1.64A11,11,0,0,0,12,23Z"
+                                >
+                                    <animateTransform
+                                        attributeName="transform"
+                                        dur="0.75s"
+                                        repeatCount="indefinite"
+                                        type="rotate"
+                                        values="0 12 12;360 12 12"
+                                    />
+                                </path>
+                            </svg>
+                        </template>
+                        <template v-else>
+                            Sign In
+                        </template>
                     </button>
                 </div>
             </form>
-
         </div>
     </div>
-
-    </div>
+    
 </template>
 
 <script setup lang="ts">
+    import { defineProps, ref, defineEmits } from 'vue';
 
-    import { defineProps,ref,defineEmits } from 'vue';
-
-    const props=defineProps({
+    const props = defineProps({
         logo_image: {
             type: String,
-            required:false
+            required: false
         },
         authType: {
             type: String,
-            required:true,
+            required: true,
         }
-    })
-    
-    const email=ref('');
-    const authKey=ref('');
+    });
+
+    const email = ref('');
+    const authKey = ref('');
+    const inputType = ref<String>('password')
+    const isLoading = ref(false);
+
+    const changeType = (type: String)=> {
+      inputType.value = type;
+    }
 
     const emit = defineEmits<{
         (e: 'submit', data: { email?: string; authKey: string }): void;
     }>();
 
-    const submitHandler=()=>{
-        const formData = {
-                email: props.authType !== 'PIN' ? email.value : undefined, // include email only if not 'PIN'
-                authKey: authKey.value,
-            };
-        emit('submit', formData);
-    }
+    const submitHandler = async () => {
+        isLoading.value = true;
 
+        const formData = {
+            email: props.authType !== 'PIN' ? email.value : undefined, // include email only if not 'PIN'
+            authKey: authKey.value,
+        };
+
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        emit('submit', formData);
+
+        isLoading.value = false;
+    }
 </script>
 
 <style scoped>
-/* Your styles here */
+    /* Your styles here */
 </style>

@@ -4,7 +4,7 @@
       <thead class="text-xs text-blue-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th v-if="heading != null" colspan="10" scope="col" class="text-base bg-white text-black px-6 py-3">
-            {{ heading }}
+            Selected {{ heading }}
           </th>
         </tr>
         <tr>
@@ -19,10 +19,7 @@
         <tr v-if="!data.length && !isLoading">
           <td colspan="10" class="px-6 py-4 text-center">No data available</td>
         </tr>
-        <tr v-if="isLoading">
-          <td colspan="2" class="px-6 py-4 text-center">Loading...</td>
-        </tr>
-
+        
         <tr
           v-for="(eachData, index) in data"
           :key="index"
@@ -32,12 +29,23 @@
           <td
             v-for="(col, key, colIndex) in eachData"
             :key='colIndex'
-            class="text-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            class="text-center px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             
-            <span v-if="key !== 'logo' && key !== 'poster'">{{ col }}</span>
+            <span 
+              v-if="key==='expired' && col==true"
+              class="bg-red-200 text-red-950 text-xs font-medium rounded">
+              Expired
+            </span>
+            <span
+              v-if="key==='expired' && col==false"
+							class="bg-green-200 text-green-950 text-xs font-medium px-2.5 py-0.5 rounded">
+              Active
+            </span>
+
+            <span v-else-if="key !== 'logo' && key !== 'poster'">{{ col }}</span>
             
             <span v-else-if="key === 'logo' || key === 'poster'" class="flex justify-center items-center">
-              <img :src="getImage(col)" alt="Logo" class="h-14 object-contain"/>
+              <img :src="getImage(col)" alt="Logo" class="w-16 h-14 object-contain rounded-lg"/>
             </span>
             
           </td>

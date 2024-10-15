@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia';
-import { metaConfigStore } from '@/store/meta-config.ts';
 import { getAuthData } from '@/store/utils/auth.ts';
 import { myFetch } from '@/store/utils/myFetch.ts';
 
-interface Project {
-  key : string;
+interface ProjectEntity {
   name : string;
+  key : string;
   poster : string;
 }
 
@@ -13,7 +12,7 @@ interface ProjectListingState {
   count : number | null;
   next : string;
   previous : string | null;
-  results : Project[];
+  results : ProjectEntity[];
 }
 
 export const useProjectListing = defineStore('useProjectListing', {
@@ -24,25 +23,44 @@ export const useProjectListing = defineStore('useProjectListing', {
     results : []
   }),
   actions: {
-    async setProjectListing(brandKey : string) {
+    
+    async fetchProjectListing(endpoint : string, brandKey? : string, isFull? : boolean)
+    {
 
-      const metaConfigStoreData=metaConfigStore();
       const api = new myFetch();
       const authKey = getAuthData();
-
+        
       const response = await api.get(
-        metaConfigStoreData.endpoints['watch.content.project.list']+`?brand=${brandKey}`,  
+        `${isFull ? endpoint : `${endpoint}${brandKey ? `?brand=${brandKey}` : ''}`}`, 
         {
           Authorization: `JWT ${authKey}`
-        }
+        },
+        isFull
       );
 
       if (response.results && response.results.length > 0) {
-        this.results = response.results;  
+
+        const projectsArray: ProjectEntity[] = response.results.map((projectData: any) => ({
+          name : projectData.name,
+          key : projectData.key,
+          logo : projectData.poster || null, 
+        }));
+
+        this.next = response.next || '';
+        this.results = [...this.results, ...projectsArray];
+
       } else {
         console.warn('No project data found');
       }
       
+    },
+
+    async resetProjectStore()
+    {
+      this.count = null;
+      this.next = '';
+      this.previous = null;
+      this.results = [];
     }
   }
 });
