@@ -6,7 +6,7 @@ export class myFetch {
   private token: string;
 
   constructor() {
-    this.baseUrl = import.meta.env.VITE_BASE_URL || "";
+    this.baseUrl = import.meta.env.VITE_API_ENDPOINT || "";
     this.token = import.meta.env.VITE_API_KEY || "";
     this.clientID = getClientID();
 

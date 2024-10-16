@@ -15,7 +15,7 @@
   const route = useRoute();
   const api = new myFetch();
   const metaConfigStoreData = metaConfigStore();
-  const baseUrl = import.meta.env.VITE_BASE_URL || '';
+  const baseUrl = import.meta.env.VITE_API_ENDPOINT || '';
   const projectKey = ref(route.query.projectKey as string | undefined);
   const screenerKey = ref(route.query.screenerKey as string | undefined);
   const videoKey = ref(route.query.videoKey as string | undefined);
@@ -92,7 +92,7 @@
 
     if(screenerKey.value==null)
     {
-      const response=await api.get(`v2/watch/content/projects/${projectKey.value}/videos/${videoKey.value}`,
+      const response: any=await api.get(`v2/watch/content/projects/${projectKey.value}/videos/${videoKey.value}`,
         {
           Authorization: `JWT ${getAuthData()}`
         }

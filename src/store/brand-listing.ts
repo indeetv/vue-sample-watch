@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { getAuthData } from '@/store/utils/auth.ts';
 import { myFetch } from '@/store/utils/myFetch.ts';
-import { textChangeRangeIsUnchanged } from 'typescript';
 
 interface BrandEntity {
   name : string;
@@ -31,7 +30,7 @@ export const useBrandData = defineStore('useBrandKey', {
       const api = new myFetch();
       const authKey = getAuthData();
 
-      const response = await api.get(
+      const response: any = await api.get(
         `${isFull ? endpoint : `${endpoint}${brandKey ? `?brand=${brandKey}` : ''}`}`,
         {
           Authorization : `JWT ${authKey}`,

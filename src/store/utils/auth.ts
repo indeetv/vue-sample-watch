@@ -7,6 +7,7 @@ export function saveAuthData(token: string) {
     }
   } catch (error) {
     console.error('Error saving authentication data:', error);
+    return error;
   }
 }
 

@@ -1,23 +1,29 @@
 <template>
-
-  <Login 
-    :logo_image='logo_image'
-    :authType='authType'
-    @submit='initiateLogin'
-  />
+  <div v-if="isLoading">
+    <Loader></Loader>
+  </div>
+  <div v-else>
+    <Login 
+      :logo_image='logo_image'
+      :authType='authType'
+      @submit='initiateLogin'
+    />
+  </div>
 
 </template>
 
 <script setup lang="ts">
 
-  import { computed , onMounted } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
   import { useRouter } from 'vue-router';
   import { saveAuthData } from '@/store/utils/auth';
   import { metaConfigStore } from '@/store/meta-config'
   import { useProductConfigStore } from '@/store/product-config';
   import { myFetch } from '@/store/utils/myFetch';
+  import Loader from '@/components/Loader.vue';
   import Login from '@/components/Login.vue';
 
+  const isLoading = ref(true);
   const router = useRouter();
   const productConfigStore = useProductConfigStore();
   const logo_image = computed(() => productConfigStore.logo_image)
@@ -25,8 +31,11 @@
   const api = new myFetch();
 
   onMounted(async ()=>{
+
     await metaConfigStore().getMetaConfigData();
     await productConfigStore.getProductConfig();
+
+    isLoading.value = false;
   })
 
   const initiateLogin = async (data: { email?: string; authKey: string }) => {
@@ -51,12 +60,12 @@
           }
         : undefined;
 
-    const response = await api.post(
+    const response: any = await api.post(
       'v2/watch/auth/login',
       requestBody
     );
 
-    saveAuthData(response.token)  
+    console.log(saveAuthData(response.token));  
     
     router.push('/brands')
       

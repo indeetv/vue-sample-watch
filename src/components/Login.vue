@@ -4,6 +4,7 @@
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <img class="mx-auto h-16 w-auto" :src='logo_image' alt="Company Logo">
             <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+            <p class="text-center text-sm text-gray-500">Please enter your credentials</p>
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -19,6 +20,7 @@
                             type="email" 
                             v-model=email 
                             autocomplete="email"  
+                            placeholder="Enter your email address"
                             class="block w-full rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
                             required
                         >
@@ -38,13 +40,15 @@
                             @focus="changeType('text')" 
                             @blur="changeType('password')"
                             v-model=authKey 
-                            autocomplete="current-password" 
+                            :placeholder="inputType === 'password' ? 'Enter your password' : 'Enter your access code'"                            autocomplete="current-password" 
                             class="block w-full rounded-md border-0 px-2.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
                             required 
                         >
                     </div>
                 </div>
-
+                <p class="text-red-600 text-center w-full text-sm">
+					{$loginStoreSnapshot.loginErrorMessage}
+				</p>
                 <div>
                     <button 
                         type="submit" 
@@ -93,10 +97,10 @@
 
     const email = ref('');
     const authKey = ref('');
-    const inputType = ref<String>('password')
+    const inputType = ref<string>('password')
     const isLoading = ref(false);
 
-    const changeType = (type: String)=> {
+    const changeType = (type: string)=> {
       inputType.value = type;
     }
 

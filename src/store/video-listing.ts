@@ -11,6 +11,7 @@ interface VideoEntity {
     expiry_date : string;
     expired : string;
     screener_key : string;
+    remaining_views : number;
 }
 
 interface VideoListingState {
@@ -34,7 +35,7 @@ export const useVideoListing = defineStore('useVideoListing', {
       const api = new myFetch();
       const authKey = getAuthData();
       
-      const response = await api.get(
+      const response: any = await api.get(
         endpoint.includes('<str:')
 				? endpoint.replace('<str:project_key>', projectKey || '')
 				: endpoint, 
@@ -53,7 +54,8 @@ export const useVideoListing = defineStore('useVideoListing', {
             start_date: this.convertEpochToDate(video.screening_details?.start_date || 0),
             expiry_date: this.convertEpochToDate(video.screening_details?.expiry_date || 0),
             expired: video.screening_details?.expired,
-            screener_key: video.screening_details?.screener_key || ''
+            screener_key: video.screening_details?.screener_key || '',
+            remaining_views: video.screening_details?.max_views-video.screening_details?.views_consumed
         }));  
 
         this.next = response.next || '';

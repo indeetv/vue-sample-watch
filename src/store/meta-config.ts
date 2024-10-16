@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { myFetch } from '@/store/utils/myFetch.ts';
-import type { MetaResponse } from './types/meta';
+import type { MetaResponse } from './types/metaConfig';
 
 export const metaConfigStore = defineStore('metaConfig', {
   state : (): MetaResponse => {
@@ -29,8 +29,10 @@ export const metaConfigStore = defineStore('metaConfig', {
         'watch.content.watchlist_project.list': '',
         'watch.content.watchlist_project.delete': '',
         'watch.stream.session.playback': '',
+        'watch.stream.player_component.retrieve': '',
         'watch.stream.view_engagement.record': '',
-        'watch.content.swimlane.project.list': ''
+        'watch.content.swimlane.project.list': '',
+        'watch.stream.player_function.retrieve' : ''
       },
       host : {
         name: ''

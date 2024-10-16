@@ -1,14 +1,14 @@
 <template>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="table-auto w-full text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
+    <table class="table-auto w-[95%] mx-auto text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-blue-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-          <th v-if="heading != null" colspan="10" scope="col" class="text-base bg-white text-black px-6 py-3">
+          <th v-if="heading != null" colspan="10" scope="col" class="text-base bg-white text-gray-700 px-6 py-3">
             Selected {{ heading }}
           </th>
         </tr>
         <tr>
-          <th v-for="(eachColumn, index) in columns" :key="index" scope="col" class="px-6 py-3">
+          <th v-for="(eachColumn, index) in columns" :key="index" scope="col" class="px-3 py-3">
             {{ eachColumn }}
           </th>
         </tr>
@@ -24,28 +24,40 @@
           v-for="(eachData, index) in data"
           :key="index"
           @click="triggerClick(eachData)"
-          class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">
+          class="h-20 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">
           
           <td
             v-for="(col, key, colIndex) in eachData"
             :key='colIndex'
-            class="text-center px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            class="text-center px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             
             <span 
               v-if="key==='expired' && col==true"
               class="bg-red-200 text-red-950 text-xs font-medium rounded">
               Expired
             </span>
+            
             <span
               v-if="key==='expired' && col==false"
 							class="bg-green-200 text-green-950 text-xs font-medium px-2.5 py-0.5 rounded">
               Active
             </span>
 
-            <span v-else-if="key !== 'logo' && key !== 'poster'">{{ col }}</span>
+            <span 
+              v-else-if="key !== 'logo' && key !== 'poster'">
+              {{ col }}
+            </span>
             
-            <span v-else-if="key === 'logo' || key === 'poster'" class="flex justify-center items-center">
-              <img :src="getImage(col)" alt="Logo" class="w-16 h-14 object-contain rounded-lg"/>
+            <span
+              v-else-if="(key === 'logo' || key === 'poster') && (!col || col === '')"
+						  class="h-14 bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded capitalize"
+						>
+							Image Unavailable
+            </span>
+
+            <span 
+              v-else-if="key === 'logo' || key === 'poster'" class="flex justify-center items-center">
+              <img :src="col" alt="Logo" class="w-16 h-14 object-contain"/>
             </span>
             
           </td>
@@ -81,11 +93,6 @@
   });
 
   const emit = defineEmits();
-  const defaultPoster = new URL('@/assets/images/default-project-poster-1.jpg', import.meta.url).href;
-
-  const getImage = (logo: string | null) => {
-    return logo ? logo : defaultPoster;
-  };
 
   const triggerClick = (eachData: any) => {
     emit('click', eachData);

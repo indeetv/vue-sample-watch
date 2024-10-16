@@ -22,8 +22,10 @@ export interface Endpoints {
     'watch.content.watchlist_project.delete' : string
     'watch.stream.session.playback' : string
     'watch.stream.view_engagement.record' : string
+    'watch.stream.player_component.retrieve': string
     'watch.content.swimlane.list' : string
     'watch.content.swimlane.project.list' : string
+    'watch.stream.player_function.retrieve' : string
   }
   
   export interface Host {

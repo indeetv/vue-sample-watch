@@ -41,7 +41,7 @@
   import Table from '@/components/Table.vue';
 
   const heading = ref('');
-  const columnsData = ref([]);
+  const columnsData = ref<string[]>([]);
   const isLoading = ref(true);
   const paginatedCallOngoing = ref<boolean>(false);
   const router = useRouter();
@@ -63,7 +63,7 @@
   const handleProjectPagination = async () => {
 
     paginatedCallOngoing.value = true;
-    await brandListing.fetchbrandListing(brandListing.next, null, true);
+    await brandListing.fetchBrandListing(brandListing.next, undefined, true);
     await new Promise(resolve => setTimeout(resolve, 1500));
     paginatedCallOngoing.value = false;
 

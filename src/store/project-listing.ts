@@ -30,7 +30,7 @@ export const useProjectListing = defineStore('useProjectListing', {
       const api = new myFetch();
       const authKey = getAuthData();
         
-      const response = await api.get(
+      const response: any = await api.get(
         `${isFull ? endpoint : `${endpoint}${brandKey ? `?brand=${brandKey}` : ''}`}`, 
         {
           Authorization: `JWT ${authKey}`

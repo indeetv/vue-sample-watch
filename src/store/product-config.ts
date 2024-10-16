@@ -20,14 +20,14 @@ export const useProductConfigStore = defineStore('productConfig', {
       const metaConfigStoreData=metaConfigStore();
       const api = new myFetch();
       
-      const data = await api.get(
+      const response: any = await api.get(
         metaConfigStoreData.endpoints['watch.meta.product.retrieve']+"?device=browser"
       );
         
-      this.key = data.key;
-      this.auth_type = data.auth_type;
-      this.logo_image = data.assets.logo_image.links[0];
-      this.signup_allowed = data.signup_allowed;
+      this.key = response.key;
+      this.auth_type = response.auth_type;
+      this.logo_image = response.assets.logo_image.links[0];
+      this.signup_allowed = response.signup_allowed;
 
     }
   }

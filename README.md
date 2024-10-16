@@ -25,8 +25,8 @@ Before running the demo, ensure you have the following:
 1. Clone this repository to your local machine.
 2. Navigate to the project directory.
 3. Update the following environment variables in your `.env` file:
-   - Replace `PUBLIC_API_KEY` with your provided API key.
-   - Replace `PUBLIC_API_ENDPOINT` with the API endpoint from the Indee API documentation.
+   - Replace `VITE_API_KEY` with your provided API key.
+   - Replace `VITE_API_ENDPOINT` with the API endpoint from the Indee API documentation.
 
 ## Installation
 
