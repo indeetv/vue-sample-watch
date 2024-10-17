@@ -6,6 +6,7 @@ interface BrandEntity {
   name : string;
   key : string;
   logo : string | null;
+  header : string | null;
 }
 
 interface BrandKeyState {
@@ -44,9 +45,13 @@ export const useBrandData = defineStore('useBrandKey', {
           name : brandData.name,
           key : brandData.key,
           logo : brandData.logo || null, 
+          header : brandData.header || null
         }));
 
+        this.next = response.next || '';
         this.results = [...this.results,...brandsArray];
+        
+        console.log("Brand : ", this.results);
         
       } else {
         console.warn('No brand data found');

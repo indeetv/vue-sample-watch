@@ -1,4 +1,6 @@
 import getClientID from "@/store/utils/getClientID";
+import { useLoggedInStore } from '@/store/loggedIn.ts';
+
 
 export class myFetch {
   private baseUrl: string;
@@ -72,7 +74,7 @@ export class myFetch {
     const contentType = response.headers.get("Content-Type");
     const isHtml = contentType && contentType.includes("text/html");
     if (response.status === 401) {
-      window.location.href = "/login";
+      useLoggedInStore().error_msg = "Invalid credentials";
       throw new Error("Unauthorized access - redirecting to login.");
     }
     if (!response.ok) {
@@ -83,6 +85,7 @@ export class myFetch {
     if (isHtml) {
       return responseBody;
     }
+    
     return JSON.parse(responseBody) as T;
   }
 }

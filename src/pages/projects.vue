@@ -6,6 +6,7 @@
     <Navbar />
     <ContentTable  
       :heading="`Brand : ${brandKey}`" 
+      :heading_align=heading_align
       :columns="columnsData" 
       :data="projectsData" 
       :isLoading="isLoading"
@@ -40,6 +41,7 @@
   import ContentTable from '@/components/ContentTable.vue';
 
   const heading = ref<string>('');
+  const heading_align = ref<string>('text-left');
   const columnsData = ref<Array<string>>([]);
   const isLoading = ref<boolean>(true);
   const paginatedCallOngoing = ref<boolean>(false);
@@ -82,7 +84,7 @@
 
     heading.value = route.query.heading as string || '';
     brandKey.value = route.query.brandKey as string | undefined;
-
+    
     await projectListing.fetchProjectListing(metaConfigStoreData.endpoints['watch.content.project.list'], brandKey.value);
 
     columnsData.value = projectListing.results.length > 0 ? Object.keys(projectListing.results[0]) : [];

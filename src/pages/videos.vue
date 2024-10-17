@@ -5,7 +5,8 @@
   <div v-else>
     <Navbar />
     <ContentTable  
-      :heading="`Project : ${projectKey}`" 
+      :heading="`Project : ${projectKey}`"
+      :heading_align=heading_align
       :columns='columnsData' 
       :data='videosData' 
       :isLoading='isLoading'
@@ -41,6 +42,7 @@
   import ContentTable from '@/components/ContentTable.vue';
 
   const heading = ref('');
+  const heading_align = ref<string>('text-left');
   const columnsData=ref<string[]>([]);
   const isLoading = ref(true);
   const paginatedCallOngoing = ref<boolean>(false);
