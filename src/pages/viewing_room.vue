@@ -90,6 +90,8 @@
   // Initialization function
   const init = async () => {
 
+    event.stopPropagation();
+    
     if(screenerKey.value==null)
     {
       const response: any=await api.get(`v2/watch/content/projects/${projectKey.value}/videos/${videoKey.value}`,

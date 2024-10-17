@@ -3,7 +3,7 @@
     <table class="table-auto w-[95%] mx-auto text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-blue-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-          <th v-if="heading != null" colspan="10" scope="col" class="text-base bg-white text-gray-700 px-6 py-3">
+          <th v-if="heading != null" colspan="10" scope="col" class="text-base bg-white text-gray-700 px-6 py-5">
             Selected {{ heading }}
           </th>
         </tr>
@@ -29,7 +29,7 @@
           <td
             v-for="(col, key, colIndex) in eachData"
             :key='colIndex'
-            class="text-center px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            class="text-center px-3 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             
             <span 
               v-if="key==='expired' && col==true"

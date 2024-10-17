@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <p class="text-red-600 text-center w-full text-sm">
-					{$loginStoreSnapshot.loginErrorMessage}
+					Error
 				</p>
                 <div>
                     <button 

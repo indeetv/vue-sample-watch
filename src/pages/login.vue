@@ -65,7 +65,7 @@
       requestBody
     );
 
-    console.log(saveAuthData(response.token));  
+    saveAuthData(response.token);  
     
     router.push('/brands')
       

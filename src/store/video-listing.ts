@@ -55,7 +55,7 @@ export const useVideoListing = defineStore('useVideoListing', {
             expiry_date: this.convertEpochToDate(video.screening_details?.expiry_date || 0),
             expired: video.screening_details?.expired,
             screener_key: video.screening_details?.screener_key || '',
-            remaining_views: video.screening_details?.max_views-video.screening_details?.views_consumed
+            remaining_views: video.screening_details?.max_views - video.screening_details?.views_consumed
         }));  
 
         this.next = response.next || '';

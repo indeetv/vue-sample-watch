@@ -4,7 +4,7 @@
   </div>
   <div v-else>
     <Navbar />
-    <Table
+    <ContentTable
       :heading='heading'
       :columns='columnsData' 
       :data='brandsData' 
@@ -38,7 +38,7 @@
   import Loader from '@/components/Loader.vue';
   import ContentLoader from '@/components/ContentLoader.vue';
   import Navbar from '@/components/Navbar.vue';
-  import Table from '@/components/Table.vue';
+  import ContentTable from '@/components/ContentTable.vue';
 
   const heading = ref('');
   const columnsData = ref<string[]>([]);

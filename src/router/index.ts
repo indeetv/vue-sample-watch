@@ -36,6 +36,11 @@ const routes = [
   {
     path : '/',
     redirect : '/login'
+  },
+  // Catch all other routes and redirect to /brands
+  {
+    path: '/:pathMatch(.*)*', 
+    redirect: '/brands'
   }
 ];
 
