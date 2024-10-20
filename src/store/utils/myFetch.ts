@@ -1,6 +1,6 @@
 import getClientID from "@/store/utils/getClientID";
 import { useLoggedInStore } from '@/store/loggedIn.ts';
-
+import { useApiErrorData } from '@/store/api-error.ts';
 
 export class myFetch {
   private baseUrl: string;
@@ -37,7 +37,7 @@ export class myFetch {
           ...headers,
         },
       });
-      return this.handleResponse<T>(response);
+      return this.handleResponse<T>(response) as T;
     } catch (error) {
       console.error("Fetch GET error:", error);
       throw error;
@@ -62,7 +62,7 @@ export class myFetch {
         },
         body: JSON.stringify(data),
       });
-      return this.handleResponse<T>(response);
+      return this.handleResponse<T>(response) as T;
     } catch (error) {
       console.error("Fetch POST error:", error);
       throw error;
@@ -73,15 +73,34 @@ export class myFetch {
     const responseBody = await response.text();
     const contentType = response.headers.get("Content-Type");
     const isHtml = contentType && contentType.includes("text/html");
+    
     if (response.status === 401) {
-      useLoggedInStore().error_msg = "Invalid credentials";
+
+      const status_code = JSON.parse(responseBody).status_code;
+      if ( status_code === "W2002") {
+        useLoggedInStore().error_msg = "Invalid Credentials";
+        const isLoginPage = window.location.pathname === "/login";
+        if (!isLoginPage) {
+          window.location.href = "/login";
+        }     
+      }
+      else
+      if ( status_code === "W2003" ) {
+        useLoggedInStore().error_msg = "Session Expired";
+        window.location.href = "/login";
+      }
+ 
       throw new Error("Unauthorized access - redirecting to login.");
+
     }
+
     if (!response.ok) {
+      useApiErrorData().setApiErrorMsg(JSON.parse(responseBody).detail);
       throw new Error(
         `HTTP error! status: ${response.status}, message: ${responseBody}`
       );
     }
+
     if (isHtml) {
       return responseBody;
     }

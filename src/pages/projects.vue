@@ -2,6 +2,9 @@
   <div v-if="isLoading">
     <Loader></Loader>
   </div>
+  <div v-else-if="isApiError">
+    <error></error>
+  </div>
   <div v-else>
     <Navbar />
     <ContentTable  
@@ -34,8 +37,10 @@
   import { ref, onMounted, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { metaConfigStore } from '@/store/meta-config.ts';
+  import { useApiErrorData } from '@/store/api-error.ts';
   import { useProjectListing } from '@/store/project-listing.ts';
   import Loader from '@/components/Loader.vue';
+  import error from '@/pages/error.vue';
   import ContentLoader from '@/components/ContentLoader.vue';
   import Navbar from '@/components/Navbar.vue';
   import ContentTable from '@/components/ContentTable.vue';
@@ -49,6 +54,7 @@
   const route = useRoute();
   const router = useRouter();
   const metaConfigStoreData = metaConfigStore();
+  const isApiError = computed(() => useApiErrorData().isError);
   const projectListing = useProjectListing();
 
   const projectsData = computed(() => projectListing.results);
@@ -70,13 +76,15 @@
   const handleProjectPagination = async () => {
 
     paginatedCallOngoing.value = true;
-    await projectListing.fetchProjectListing(projectListing.next, null, true);
+    await projectListing.fetchProjectListing(projectListing.next, undefined, true);
     await new Promise(resolve => setTimeout(resolve, 1500));
     paginatedCallOngoing.value = false;
 
   };
 
   onMounted(async () => {
+
+    useApiErrorData().resetApiErrorMsg();
 
     await projectListing.resetProjectStore();
 

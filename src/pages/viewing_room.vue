@@ -1,20 +1,33 @@
 <template>
-  <div id="main-container">
+  
+  <div v-if="isLoading">
+    <Loader></Loader>
+  </div>
+  <div v-else-if="isApiError">
+    <error></error>
+  </div>
+  <div v-else id="main-container">
     <iframe id="video_player"></iframe>
   </div>
+  
 </template>
 
 <script setup lang="ts">
 
-  import { onMounted ,ref } from 'vue';
+  import { onMounted , ref, computed } from 'vue';
   import { useRoute } from 'vue-router';
   import { metaConfigStore } from '@/store/meta-config.ts';
+  import { useApiErrorData } from '@/store/api-error.ts';
+  import Loader from '@/components/Loader.vue';
+  import error from '@/pages/error.vue';
   import { getAuthData } from '@/store/utils/auth.ts';
   import { myFetch } from '@/store/utils/myFetch.ts';
 
+  const isLoading = ref(true);
   const route = useRoute();
   const api = new myFetch();
   const metaConfigStoreData = metaConfigStore();
+  const isApiError = computed(() => useApiErrorData().isError);
   const baseUrl = import.meta.env.VITE_API_ENDPOINT || '';
   const projectKey = ref(route.query.projectKey as string | undefined);
   const screenerKey = ref(route.query.screenerKey as string | undefined);
@@ -94,7 +107,11 @@
     
     if(screenerKey.value==null)
     {
-      const response: any=await api.get(`v2/watch/content/projects/${projectKey.value}/videos/${videoKey.value}`,
+      let videoRetrieveUrl = metaConfigStoreData.endpoints['watch.content.video.retrieve']
+                            .replace("<str:project_key>", String(projectKey.value))
+                            .replace("<str:video_key>", String(videoKey.value));
+
+      const response: any = await api.get(videoRetrieveUrl,
         {
           Authorization: `JWT ${getAuthData()}`
         }
@@ -102,16 +119,22 @@
       screenerKey.value=response.screening_details.screener_key;
     }
     
-    dataToEnablePlayback.apiUrl=`v2/watch/stream/${screenerKey.value}/playback`;
-    dataToEnablePlayback.embeddablePlayerInitializationUrl=`${baseUrl}${metaConfigStoreData.endpoints['watch.stream.player_function.retrieve']}`
-    dataToEnablePlayback.embeddablePlayerTemplateURL=`${baseUrl}${metaConfigStoreData.endpoints['watch.stream.player_component.retrieve']}`;
+    dataToEnablePlayback.apiUrl = metaConfigStoreData.endpoints['watch.stream.session.playback'].replace("<str:screener_key>",String(screenerKey.value));
+    dataToEnablePlayback.embeddablePlayerInitializationUrl = `${baseUrl}${metaConfigStoreData.endpoints['watch.stream.player_function.retrieve']}`
+    dataToEnablePlayback.embeddablePlayerTemplateURL = `${baseUrl}${metaConfigStoreData.endpoints['watch.stream.player_component.retrieve']}`;
+    
     await loadScript(dataToEnablePlayback.embeddablePlayerInitializationUrl);
+    isLoading.value = false;
     await fetchPlaybackData();
     
   };
 
   onMounted(() => {
+
+    useApiErrorData().resetApiErrorMsg();
+
     init();
+
   });
 
 </script>

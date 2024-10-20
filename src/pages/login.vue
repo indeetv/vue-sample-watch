@@ -1,4 +1,5 @@
 <template>
+  
   <div v-if="isLoading">
     <Loader></Loader>
   </div>

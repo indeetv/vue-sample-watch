@@ -50,9 +50,7 @@ export const useBrandData = defineStore('useBrandKey', {
 
         this.next = response.next || '';
         this.results = [...this.results,...brandsArray];
-        
-        console.log("Brand : ", this.results);
-        
+                
       } else {
         console.warn('No brand data found');
       }

@@ -2,6 +2,9 @@
   <div v-if="isLoading">
     <Loader></Loader>
   </div>
+  <div v-else-if="isApiError">
+    <error></error>
+  </div>
   <div v-else>
     <Navbar />
     <ContentTable  
@@ -35,8 +38,10 @@
   import { ref, onMounted, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router'; 
   import { metaConfigStore } from '@/store/meta-config.ts';
+  import { useApiErrorData } from '@/store/api-error.ts';
   import { useVideoListing } from '@/store/video-listing.ts';
   import Loader from '@/components/Loader.vue';
+  import error from '@/pages/error.vue';
   import ContentLoader from '@/components/ContentLoader.vue';
   import Navbar from '@/components/Navbar.vue';
   import ContentTable from '@/components/ContentTable.vue';
@@ -49,7 +54,8 @@
   const projectKey = ref<string | undefined>(''); 
   const route = useRoute(); 
   const router = useRouter(); 
-  const metaConfigStoreData=metaConfigStore();
+  const metaConfigStoreData = metaConfigStore();
+  const isApiError = computed(() => useApiErrorData().isError);
   const videoListing = useVideoListing();
 
   const videosData = computed(() => videoListing.results);
@@ -64,6 +70,8 @@
     };
 
   onMounted(async () => {
+
+    useApiErrorData().resetApiErrorMsg();
 
     await videoListing.resetVideoStore();
 
@@ -86,7 +94,7 @@
       path : '/viewing_room',
       query : {
         projectKey : projectKey.value,
-        videoKey : video.video_key,
+        videoKey : video.key,
         screenerKey : video.screener_key || null
       }
     }); 
