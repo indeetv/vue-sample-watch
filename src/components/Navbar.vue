@@ -1,17 +1,15 @@
 <template>
-    <nav class="sticky top-0 z-10 bg-white border-gray-200 dark:bg-gray-900">
+    <nav class="sticky top-0 z-10 bg-white border-gray-200">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div 
-                @click="()=>{
-                    router.push('/brands');
-                }" 
+                @click="()=>{ router.push('/brands'); }" 
                 class="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer">
                 <img 
                     src="https://indee.tv/wp-content/themes/indee/images/favicons/favicon_192x192.png" 
                     class="h-8" 
                     alt="Indee.tv Logo" 
                 />
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                <span class="self-center text-2xl font-semibold whitespace-nowrap">
                     Indee Vue Demo App
                 </span>
             </div>
@@ -19,7 +17,7 @@
                 <button 
                     @click="clearData" 
                     type="button" 
-                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
                 >
                     Log out
                 </button>

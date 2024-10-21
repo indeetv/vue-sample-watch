@@ -101,7 +101,7 @@
   const emit = defineEmits();
 
   const triggerClick = (eachData: any) => {
-    emit('click', eachData);
+    emit('clicked', eachData);
   };
 
 </script>

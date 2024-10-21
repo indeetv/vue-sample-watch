@@ -13,7 +13,7 @@
       :columns="columnsData" 
       :data="projectsData" 
       :isLoading="isLoading"
-      @click="handleClick"
+      @clicked="handleClick"
     />
     <div 
       v-if="paginatedCallOngoing">

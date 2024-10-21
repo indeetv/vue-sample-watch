@@ -12,7 +12,7 @@
       :columns='columnsData' 
       :data='brandsData' 
       :isLoading='isLoading'
-      @click='handleClick'
+      @clicked='handleClick'
     />
     <div 
       v-if="paginatedCallOngoing">

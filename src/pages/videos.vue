@@ -13,7 +13,7 @@
       :columns='columnsData' 
       :data='videosData' 
       :isLoading='isLoading'
-      @click='playVideo'
+      @clicked='playVideo'
     />
     <div 
       v-if="paginatedCallOngoing">
