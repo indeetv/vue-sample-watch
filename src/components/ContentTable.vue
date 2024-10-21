@@ -1,7 +1,7 @@
 <template>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="table-auto w-[95%] mx-auto text-sm text-center rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-blue-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+    <table class="table-auto w-[95%] mx-auto text-sm text-center rtl:text-right text-gray-500">
+      <thead class="text-xs text-blue-700 uppercase bg-gray-100">
         <tr>
           <th v-if="heading != null" colspan="10" scope="col" :class="['text-base', heading_align, 'bg-white', 'text-gray-700', 'px-6', 'py-8']">
             Selected {{ heading }}
@@ -24,12 +24,12 @@
           v-for="(eachData, index) in data"
           :key="index"
           @click="triggerClick(eachData)"
-          class="h-20 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">
+          class="h-20 odd:bg-white even:bg-gray-50 border-b hover:bg-gray-200 cursor-pointer">
           
           <td
             v-for="(col, key, colIndex) in eachData"
             :key='colIndex'
-            class="break-words  max-w-[8.25rem] text-center px-3 py-4 font-medium text-gray-900 dark:text-white">
+            class="break-words  max-w-[8.25rem] text-center px-3 py-4 font-medium text-gray-900">
             
             <span 
               v-if="String(key) === 'expired' && col == true"
