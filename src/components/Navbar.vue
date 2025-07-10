@@ -5,7 +5,7 @@
                 @click="()=>{ router.push('/brands'); }" 
                 class="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer">
                 <img 
-                    src="/public/images/indee-logo/indeeLogo.webp" 
+                    src="/images/indee-logo/indeeLogo.webp" 
                     class="h-8" 
                     alt="Indee.tv Logo" 
                 />

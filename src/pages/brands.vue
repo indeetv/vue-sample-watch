@@ -58,7 +58,6 @@
 
   const handleClick = (payLoad : any) => {
 
-    event.stopPropagation();
     router.push({ 
       path : '/project', 
       query : { heading : payLoad.name, brandKey : payLoad.key } 
