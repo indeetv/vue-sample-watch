@@ -36,7 +36,8 @@ export const metaConfigStore = defineStore('metaConfig', {
       },
       host : {
         name: ''
-      }
+      },
+      isLoaded: false
     }
   },
   getters : {},
@@ -44,16 +45,26 @@ export const metaConfigStore = defineStore('metaConfig', {
     
     async getMetaConfigData() {
 
-      const api = new myFetch();
+      try {
 
-      // Fetch the product configuration data
-      const data = await api.get(
-        `v2/watch/meta/endpoints?device=browser`
-      );
-          
-      // Update the store's state with the fetched data
-      this.endpoints = (data as MetaResponse).endpoints
-      this.host = (data as MetaResponse).host
+        const api = new myFetch();
+
+        if(!this.isLoaded)
+        {
+          // Fetch the meta-endpoint data
+          const data = await api.get(
+            `v2/watch/meta/endpoints?device=browser`
+          );
+          // Update the store's state with the fetched data
+          this.endpoints = (data as MetaResponse).endpoints
+          this.host = (data as MetaResponse).host
+          this.isLoaded = true
+        }
+      }
+      catch(e)
+      {
+        this.isLoaded = false
+      }
           
     } 
   }

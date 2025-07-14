@@ -23,6 +23,7 @@
   import { getAuthData } from '@/store/utils/auth.ts';
   import { myFetch } from '@/store/utils/myFetch.ts';
   import { useVideoStore } from '@/store/video';
+  import { VideoEntity } from '@/store/types/video';
 
   declare global {
   interface Window {
@@ -41,6 +42,7 @@
   const projectKey = ref(route.query.projectKey as string | undefined);
   const screenerKey = ref(route.query.screenerKey as string | undefined);
   const videoKey = ref(route.query.videoKey as string | undefined);
+  const currentSelectedVideo = ref<VideoEntity | undefined>(undefined);
 
   const dataToEnablePlayback = {
     apiUrl: "",
@@ -79,14 +81,14 @@
         playbackSourcesData: { 
           drm: playbackData.drm,
           manifest: playbackData.manifest,
-          defaultSubtitle: videoStore.video?.subtitles[0]?.label || ''
+          defaultSubtitle: currentSelectedVideo.value?.subtitles[0]?.label || ''
         },
         playbackMode: 'dash',
-        overlayWatermarkDetails: videoStore.video?.overlay_watermark_details,
+        overlayWatermarkDetails: currentSelectedVideo.value?.overlay_watermark_details,
         savePlayerPreferences: true,
         resumeDetails: {
-            from_second: videoStore.video?.resume_playback?.from_second || 0,
-            duration_in_sec: videoStore.video?.duration_in_sec
+            from_second: currentSelectedVideo.value?.resume_playback?.from_second || 0,
+            duration_in_sec: currentSelectedVideo.value?.duration_in_sec
           },
         engagementData: 
         { 
@@ -95,7 +97,7 @@
         },
       },
       embeddablePlayerHtml,
-      videoStore.video?.key,
+      currentSelectedVideo.value?.key,
       { autoPlay: true }
       );
     }
@@ -123,9 +125,9 @@
   // Initialization function
   const init = async () => {
     
-    await videoStore.fetchVideoDetails(projectKey.value!, videoKey.value!);
+    currentSelectedVideo.value = await videoStore.fetchVideoDetails(projectKey.value!, videoKey.value!);
 
-    screenerKey.value=videoStore.video?.screening_details.screener_key || '';
+    screenerKey.value = currentSelectedVideo.value?.screening_details.screener_key || '';
     
     dataToEnablePlayback.apiUrl = metaConfigStoreData.endpoints['watch.stream.session.playback'].replace("<str:screener_key>",String(screenerKey.value));
     dataToEnablePlayback.embeddablePlayerInitializationUrl = `${baseUrl}${metaConfigStoreData.endpoints['watch.stream.player_function.retrieve']}`

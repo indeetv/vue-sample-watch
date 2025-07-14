@@ -35,5 +35,6 @@ export interface Endpoints {
   export interface MetaResponse {
     endpoints : Endpoints
     host : Host
+    isLoaded : Boolean
   }
   
