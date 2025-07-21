@@ -61,7 +61,6 @@
 
   const handleClick = (payLoad: any) => {
 
-    event.stopPropagation();
     router.push({
       path: '/videos',
       query: {

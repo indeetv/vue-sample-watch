@@ -22,16 +22,27 @@
   import error from '@/pages/error.vue';
   import { getAuthData } from '@/store/utils/auth.ts';
   import { myFetch } from '@/store/utils/myFetch.ts';
+  import { useVideoStore } from '@/store/video';
+  import { VideoEntity } from '@/store/types/video';
+
+  declare global {
+  interface Window {
+    initializeIndeePlayer: any
+    listenIndeePlayerState: any
+    }
+  }
 
   const isLoading = ref(true);
   const route = useRoute();
   const api = new myFetch();
   const metaConfigStoreData = metaConfigStore();
+  const videoStore = useVideoStore();
   const isApiError = computed(() => useApiErrorData().isError);
   const baseUrl = import.meta.env.VITE_API_ENDPOINT || '';
   const projectKey = ref(route.query.projectKey as string | undefined);
   const screenerKey = ref(route.query.screenerKey as string | undefined);
   const videoKey = ref(route.query.videoKey as string | undefined);
+  const currentSelectedVideo = ref<VideoEntity | undefined>(undefined);
 
   const dataToEnablePlayback = {
     apiUrl: "",
@@ -68,14 +79,25 @@
       'video_player',
       {
         playbackSourcesData: { 
-          drm: playbackData.drm, manifest: playbackData.manifest 
+          drm: playbackData.drm,
+          manifest: playbackData.manifest,
+          defaultSubtitle: currentSelectedVideo.value?.subtitles[0]?.label || ''
         },
         playbackMode: 'dash',
-        overlayWatermarkDetails: {},
-        engagementInterval: { ...playbackData.engagement },
+        overlayWatermarkDetails: currentSelectedVideo.value?.overlay_watermark_details,
+        savePlayerPreferences: true,
+        resumeDetails: {
+            from_second: currentSelectedVideo.value?.resume_playback?.from_second || 0,
+            duration_in_sec: currentSelectedVideo.value?.duration_in_sec
+          },
+        engagementData: 
+        { 
+          push_interval: playbackData.engagement.push_interval,
+          endpointUrl: baseUrl+metaConfigStoreData.endpoints['watch.stream.view_engagement.record'] + '?'
+        },
       },
       embeddablePlayerHtml,
-      'video_key',
+      currentSelectedVideo.value?.key,
       { autoPlay: true }
       );
     }
@@ -102,22 +124,10 @@
 
   // Initialization function
   const init = async () => {
-
-    event.stopPropagation();
     
-    if(screenerKey.value==null)
-    {
-      let videoRetrieveUrl = metaConfigStoreData.endpoints['watch.content.video.retrieve']
-                            .replace("<str:project_key>", String(projectKey.value))
-                            .replace("<str:video_key>", String(videoKey.value));
+    currentSelectedVideo.value = await videoStore.fetchVideoDetails(projectKey.value!, videoKey.value!);
 
-      const response: any = await api.get(videoRetrieveUrl,
-        {
-          Authorization: `JWT ${getAuthData()}`
-        }
-      );
-      screenerKey.value=response.screening_details.screener_key;
-    }
+    screenerKey.value = currentSelectedVideo.value?.screening_details.screener_key || '';
     
     dataToEnablePlayback.apiUrl = metaConfigStoreData.endpoints['watch.stream.session.playback'].replace("<str:screener_key>",String(screenerKey.value));
     dataToEnablePlayback.embeddablePlayerInitializationUrl = `${baseUrl}${metaConfigStoreData.endpoints['watch.stream.player_function.retrieve']}`
@@ -129,9 +139,10 @@
     
   };
 
-  onMounted(() => {
+  onMounted(async () => {
 
     useApiErrorData().resetApiErrorMsg();
+    await metaConfigStoreData.getMetaConfigData();
 
     init();
 

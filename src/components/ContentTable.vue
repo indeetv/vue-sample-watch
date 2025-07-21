@@ -73,7 +73,7 @@
 
   import { defineProps, defineEmits, PropType } from 'vue';
 
-  const props = defineProps({
+  defineProps({
     heading: {
       type: String,
       required: false

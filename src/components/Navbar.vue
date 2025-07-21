@@ -5,7 +5,7 @@
                 @click="()=>{ router.push('/brands'); }" 
                 class="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer">
                 <img 
-                    src="https://indee.tv/wp-content/themes/indee/images/favicons/favicon_192x192.png" 
+                    src="/images/indee-logo/indeeLogo.webp" 
                     class="h-8" 
                     alt="Indee.tv Logo" 
                 />
