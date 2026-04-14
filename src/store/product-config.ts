@@ -26,7 +26,7 @@ export const useProductConfigStore = defineStore('productConfig', {
         
       this.key = response.key;
       this.auth_type = response.auth_type;
-      this.logo_image = response.assets.logo_image.links[0];
+      this.logo_image = response.assets?.logo_image?.links?.[0] ?? '';
       this.signup_allowed = response.signup_allowed;
 
     }
