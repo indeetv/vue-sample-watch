@@ -82,7 +82,7 @@
 </template>
 
 <script setup lang="ts">
-    import { defineProps, ref, defineEmits, computed } from 'vue';
+    import { ref, computed } from 'vue';
     import { useLoggedInStore } from '@/store/loggedIn.ts';
 
     const props = defineProps({
