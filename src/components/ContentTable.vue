@@ -71,7 +71,7 @@
 
 <script lang='ts' setup>
 
-  import { defineProps, defineEmits, PropType } from 'vue';
+  import { PropType } from 'vue';
 
   defineProps({
     heading: {
